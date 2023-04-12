@@ -53,9 +53,8 @@ class ProductsController extends BaseController
     public function store(Request $request)
     {
         try {
-
             Validator::make($request->all(), [
-                'file' => 'required',
+                'file' => 'required|file|mimes:csv,txt',
             ])->validate();
 
             $rows = Excel::toCollection(new ProductsImport(), $request->file('file'))->first()->toArray();
@@ -112,7 +111,7 @@ class ProductsController extends BaseController
 
                 return $this->sendResponse($importedProducts, 'Products Imported successfully', 201);
             } else {
-                return $this->sendError('Validation Errors.', ['error' => $errors], 401);
+                return $this->sendError('Validation Errors.', ['errors' => $errors], 422);
             }
         } catch (Exception $exception) {
             return $this->HandleException($exception);
