@@ -136,7 +136,9 @@ class UserController extends BaseController
     public function logout(Request $request): JsonResponse
     {
         try {
-            Auth::user()->tokens()->delete();
+            if (auth()->check()) {
+                Auth::user()->tokens()->delete();
+            }
             return $this->sendResponse([], 'User logged out successfully.');
         } catch (\Exception $exception) {
             return $this->HandleException($exception);
