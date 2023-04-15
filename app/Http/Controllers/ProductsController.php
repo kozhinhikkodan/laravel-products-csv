@@ -54,7 +54,7 @@ class ProductsController extends BaseController
     {
         try {
             Validator::make($request->all(), [
-                'file' => 'required|file|mimes:csv,txt',
+                'file' => 'required|mimetypes:text/csv,text/plain,text/x-csv',
             ])->validate();
 
             $rows = Excel::toCollection(new ProductsImport(), $request->file('file'))->first()->toArray();
